@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Google Sheet as JSON Data</title>
+</head>
+
+<body>
+    <h1>Google Sheet as JSON Data</h1> </body>
+    <script>
+    // 1PLmYQR2y4F5mUuhic22vj57C2d7NKhfU-bo87VMWvbo
+        let url = 'https://spreadsheets.google.com/feeds/list/1PLmYQR2y4F5mUuhic22vj57C2d7NKhfU-bo87VMWvbo/2/public/values?alt=json';
+        fetch(url)
+        .then(function(response){
+            return response.json();   
+        })
+        .then(function(data){
+            console.log(data);  
+        })
+    
+    </script>
+</html>

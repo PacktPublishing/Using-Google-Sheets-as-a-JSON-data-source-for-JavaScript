@@ -1,0 +1,25 @@
+<script>
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    let arrayTest = [1, 4, 6, 7, 8, 99];
+    const mapTest = arrayTest.map(function (x) {
+        //console.log(x);
+        return x * 2;
+    });
+    console.log(mapTest);
+    const id = '1PLmYQR2y4F5mUuhic22vj57C2d7NKhfU-bo87VMWvbo';
+    let urls = [];
+    for (let x = 1; x < 4; x++) {
+        urls.push('https://spreadsheets.google.com/feeds/list/' + id + '/' + x + '/public/values?alt=json');
+    }
+    console.log(urls);
+    const testUrls = urls.map(function (url) {
+        console.log(url);
+        fetch(url).then(function (response) {
+            return response.json()
+        }).then(function(data){ 
+            console.log(data);
+            return data;
+        })
+    })
+    console.log(testUrls);
+</script>

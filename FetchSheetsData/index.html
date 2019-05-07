@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Google Sheet as JSON Data</title>
+</head>
+
+<body>
+    <h1>Google Sheet as JSON Data</h1>
+    <div class="output"></div>
+</body>
+<script>
+    // 1PLmYQR2y4F5mUuhic22vj57C2d7NKhfU-bo87VMWvbo
+    const app = function () {
+        const myData = {};
+        const output = document.querySelector('.output');
+
+        function init() {
+            console.log('Loaded');
+            loadJSON();
+        }
+
+        function loadOutput() {
+            for (let x = 0; x < myData.content.length; x++) {
+                let temp = myData.content[x];
+                output.innerHTML += '<h1>' + temp.heading + '</h1><p>' + temp.content + '</p>';
+                console.log(myData.content[x]);
+            }
+            for (let x = 0; x < myData.people.length; x++) {
+                let temp = myData.people[x];
+                output.innerHTML += '<h1>' + temp.first + ' ' + temp.last + '</h1><p>' + temp.email + '</p>';
+                console.log(myData.content[x]);
+            }
+            console.log(myData);
+        }
+
+        function loadJSON() {
+            const id = '1PLmYQR2y4F5mUuhic22vj57C2d7NKhfU-bo87VMWvbo';
+            let urls = [];
+            for (let x = 1; x < 4; x++) {
+                urls.push('https://spreadsheets.google.com/feeds/list/' + id + '/' + x + '/public/values?alt=json');
+            }
+            Promise.all(urls.map(url => {
+                return fetch(url).then(response => response.json()).then(data => {
+                    let tempArray = [];
+                    let sheetName = data.feed.title.$t;
+                    data.feed.entry.forEach(element => {
+                        let holder = {};
+                        for (let key in element) {
+                            if (key.substring(0, 3) == 'gsx') {
+                                //console.log(key.split('$')[1]);
+                                holder[key.split('$')[1]] = element[key].$t;
+                            }
+                        }
+                        tempArray.push(holder);
+                        //console.log(element);  
+                    })
+                    console.log(tempArray);
+                    //console.log(data);
+                    return {
+                        key: sheetName
+                        , value: tempArray
+                    }
+                })
+            })).then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    myData[data[i].key] = data[i].value;
+                }
+                loadOutput();
+            })
+            console.log(urls);
+        }
+        return {
+            init: init
+        };
+    }();
+    document.addEventListener('DOMContentLoaded', app.init);
+</script>
+
+</html>

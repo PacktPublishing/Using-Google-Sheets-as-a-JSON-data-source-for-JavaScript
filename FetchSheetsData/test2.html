@@ -1,0 +1,28 @@
+<script>
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
+/*    var promise1 = Promise.resolve(3);
+    var promise2 = 42;
+    var promise3 = new Promise(function (resolve, reject) {
+        setTimeout(resolve, 100, 'foo');
+    });
+    Promise.all([promise1, promise2, promise3]).then(function (values) {
+        console.log(values);
+    });*/
+    const id = '1PLmYQR2y4F5mUuhic22vj57C2d7NKhfU-bo87VMWvbo';
+    let urls = [];
+    for (let x = 1; x < 4; x++) {
+        urls.push('https://spreadsheets.google.com/feeds/list/' + id + '/' + x + '/public/values?alt=json');
+    }
+    Promise.all(urls.map(function(url){
+        console.log(url);
+        return fetch(url).then(function(response){
+             return response.json()}
+        ).then(function(data) {
+            console.log(data);
+            return data;
+        })
+    })).then(data => {
+        console.log(data);
+    })
+</script>
